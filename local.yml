@@ -60,3 +60,9 @@ services:
       - teleeng_postgres
     ports: [ ]
     command: /start-celerybeat
+
+  teleeng_bot:
+    <<: *teleeng_django
+    container_name: teleeng_telegram_bot
+    command: python /app/bot.py
+    ports: [ ]
