@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=teleeng_postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=teleeng
+POSTGRES_USER=lnjPBayHKQKSeNtgmuHcHapGZXCAmHNU
+POSTGRES_PASSWORD=bgEw2ZwFi5MVXc3a2GdgeARqeIP56k5D95LNoKYkyPn1l6z93gKjCaeY4C6fzagq

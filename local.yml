@@ -1,0 +1,62 @@
+version: '3'
+volumes:
+  teleeng_postgres_data: { }
+  teleeng_postgres_data_backups: { }
+  minio_data:
+    driver: local
+
+services:
+  teleeng_django: &teleeng_django
+    build:
+      context: .
+      dockerfile: ./compose/local/django/Dockerfile
+    image: teleeng_django
+    container_name: teleeng_django
+    depends_on:
+      - teleeng_postgres
+      - teleeng_redis
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "8000:8000"
+    command: /start
+
+  teleeng_postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    #    image: postgis/postgis:14-3.3
+    container_name: teleeng_postgres
+    volumes:
+      - teleeng_postgres_data:/var/lib/postgresql/data:Z
+      - teleeng_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.local/.postgres
+
+  teleeng_redis:
+    hostname: teleeng_redis
+    image: redis:latest
+    container_name: teleeng_redis
+
+  teleeng_celeryworker:
+    <<: *teleeng_django
+    image: teleeng_local_celeryworker
+    container_name: teleeng_celeryworker
+    depends_on:
+      - teleeng_redis
+      - teleeng_postgres
+    ports: [ ]
+    command: /start-celeryworker
+
+  teleeng_celerybeat:
+    <<: *teleeng_django
+    image: teleeng_local_celerybeat
+    container_name: teleeng_celerybeat
+    depends_on:
+      - teleeng_redis
+      - teleeng_postgres
+    ports: [ ]
+    command: /start-celerybeat
