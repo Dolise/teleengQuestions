@@ -12,16 +12,16 @@ from telegram.ext import (
     ConversationHandler,
 )
 
-from teleeng_questions.core.models import (
-    Poll,
-    PollResponse,
-    PollResponseAnswer,
-)
-
 #  Инициализация Django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 django.setup()
+
+from teleeng_questions.core.models import (  # noqa: E402
+    Poll,
+    PollResponse,
+    PollResponseAnswer,
+)
 
 # Энам для состояний
 ASKING, ANSWERING = range(2)
